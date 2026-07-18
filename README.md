@@ -19,10 +19,8 @@ This extension requires specific drivers to handle the low-level communication b
 
 ## Installation
 
-1.  Download the latest release from the [Releases page](https://github.com/your-username/PlayniteSense/releases).
-2.  Open Playnite.
-3.  Go to `Add-ons` -> `Install from file...` and select the `.pext` file you downloaded.
-4.  Restart Playnite to ensure the extension initializes correctly.
+1.  Download the latest release from the [Releases page](https://github.com/your-username/PlayniteSense/releases) and open the pext file.
+2. Restart Playnite.
 
 ## How to Use
 
