@@ -1,0 +1,148 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\PadVibe\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\padvibe.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:padvibe.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\padvibesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:padvibesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\extension.yaml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:extension.yaml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\padvibesettingsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:padvibesettingsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\padvibesettingsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:padvibesettingsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\virtualpadbridge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:virtualpadbridge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\realpad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:realpad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|c:\\projects\\padvibe\\padvibe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}|PadVibe.csproj|solutionrelative:padvibe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PadVibe.csproj",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\PadVibe.csproj",
+              "RelativeDocumentMoniker": "PadVibe.csproj",
+              "ToolTip": "C:\\Projects\\PadVibe\\PadVibe.csproj",
+              "RelativeToolTip": "PadVibe.csproj",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACEAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-18T00:13:40.59Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "extension.yaml",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\extension.yaml",
+              "RelativeDocumentMoniker": "extension.yaml",
+              "ToolTip": "C:\\Projects\\PadVibe\\extension.yaml",
+              "RelativeToolTip": "extension.yaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2026-07-18T00:13:21.34Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RealPad.cs",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\RealPad.cs",
+              "RelativeDocumentMoniker": "RealPad.cs",
+              "ToolTip": "C:\\Projects\\PadVibe\\RealPad.cs",
+              "RelativeToolTip": "RealPad.cs",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAYwI8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-17T22:43:42.405Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PadVibeSettings.cs",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\PadVibeSettings.cs",
+              "RelativeDocumentMoniker": "PadVibeSettings.cs",
+              "ToolTip": "C:\\Projects\\PadVibe\\PadVibeSettings.cs",
+              "RelativeToolTip": "PadVibeSettings.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA3wCIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-17T23:18:52.623Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PadVibeSettingsView.xaml.cs",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\PadVibeSettingsView.xaml.cs",
+              "RelativeDocumentMoniker": "PadVibeSettingsView.xaml.cs",
+              "ToolTip": "C:\\Projects\\PadVibe\\PadVibeSettingsView.xaml.cs",
+              "RelativeToolTip": "PadVibeSettingsView.xaml.cs",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAQwJgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-17T22:51:02.578Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PadVibeSettingsView.xaml",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\PadVibeSettingsView.xaml",
+              "RelativeDocumentMoniker": "PadVibeSettingsView.xaml",
+              "ToolTip": "C:\\Projects\\PadVibe\\PadVibeSettingsView.xaml",
+              "RelativeToolTip": "PadVibeSettingsView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-07-17T22:50:50.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "PadVibe.cs",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\PadVibe.cs",
+              "RelativeDocumentMoniker": "PadVibe.cs",
+              "ToolTip": "C:\\Projects\\PadVibe\\PadVibe.cs",
+              "RelativeToolTip": "PadVibe.cs",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAQwHcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-17T22:43:43.328Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "VirtualPadBridge.cs",
+              "DocumentMoniker": "C:\\Projects\\PadVibe\\VirtualPadBridge.cs",
+              "RelativeDocumentMoniker": "VirtualPadBridge.cs",
+              "ToolTip": "C:\\Projects\\PadVibe\\VirtualPadBridge.cs",
+              "RelativeToolTip": "VirtualPadBridge.cs",
+              "ViewState": "AgIAAG4BAAAAAAAAAAAYwIgBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-17T22:22:23.856Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

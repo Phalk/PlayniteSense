@@ -1,0 +1,177 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v4.6.2": {
+      "Nefarius.ViGEm.Client/1.21.256": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Nefarius.ViGEm.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Nefarius.ViGEm.Client.dll": {}
+        }
+      },
+      "SharpDX/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/SharpDX.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net45/SharpDX.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "SharpDX.XInput/4.2.0": {
+        "type": "package",
+        "dependencies": {
+          "SharpDX": "4.2.0"
+        },
+        "compile": {
+          "lib/net45/SharpDX.XInput.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/SharpDX.XInput.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Nefarius.ViGEm.Client/1.21.256": {
+      "sha512": "VJMO6hkalOZ7YdXTwcR881aTgPZlN7thEs3x6CWE/kEu7SdE5bY7QuDXkR2eqXfPAee4NrxInIAqa45PorpTsA==",
+      "type": "package",
+      "path": "nefarius.vigem.client/1.21.256",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ViGEm_Icon.png",
+        "lib/netstandard2.0/Nefarius.ViGEm.Client.dll",
+        "nefarius.vigem.client.1.21.256.nupkg.sha512",
+        "nefarius.vigem.client.nuspec"
+      ]
+    },
+    "SharpDX/4.2.0": {
+      "sha512": "3pv0LFMvfK/dv1qISJnn8xBeeT6R/FRvr0EV4KI2DGsL84Qlv6P7isWqxGyU0LCwlSVCJN3jgHJ4Bl0KI2PJww==",
+      "type": "package",
+      "path": "sharpdx/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/.xml",
+        "lib/net40/SharpDX.dll",
+        "lib/net40/SharpDX.pdb",
+        "lib/net45/.xml",
+        "lib/net45/SharpDX.dll",
+        "lib/net45/SharpDX.pdb",
+        "lib/netstandard1.1/.xml",
+        "lib/netstandard1.1/SharpDX.dll",
+        "lib/netstandard1.1/SharpDX.pdb",
+        "lib/uap10.0/.xml",
+        "lib/uap10.0/SharpDX.dll",
+        "lib/uap10.0/SharpDX.pdb",
+        "lib/uap10.0/SharpDX.pri",
+        "sharpdx.4.2.0.nupkg.sha512",
+        "sharpdx.nuspec"
+      ]
+    },
+    "SharpDX.XInput/4.2.0": {
+      "sha512": "mH3soea+aVUaTuFrkwx+zohklDvCczcgtuTiZJbOCyS5GZ/F9se4BsRJ86xTA9baf0drXYbZQj152PN7lnjiwg==",
+      "type": "package",
+      "path": "sharpdx.xinput/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/SharpDX.XInput.dll",
+        "lib/net40/SharpDX.XInput.pdb",
+        "lib/net40/SharpDX.XInput.xml",
+        "lib/net45/SharpDX.XInput.dll",
+        "lib/net45/SharpDX.XInput.pdb",
+        "lib/net45/SharpDX.XInput.xml",
+        "lib/netstandard1.1/SharpDX.XInput.dll",
+        "lib/netstandard1.1/SharpDX.XInput.pdb",
+        "lib/netstandard1.1/SharpDX.XInput.xml",
+        "lib/uap10.0/SharpDX.XInput.dll",
+        "lib/uap10.0/SharpDX.XInput.pdb",
+        "lib/uap10.0/SharpDX.XInput.pri",
+        "lib/uap10.0/SharpDX.XInput.xml",
+        "sharpdx.xinput.4.2.0.nupkg.sha512",
+        "sharpdx.xinput.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v4.6.2": [
+      "Nefarius.ViGEm.Client >= 1.21.256",
+      "SharpDX.XInput >= 4.2.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Junior\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Projects\\PlayniteSense\\PlayniteSense.csproj",
+      "projectName": "PlayniteSense",
+      "projectPath": "C:\\Projects\\PlayniteSense\\PlayniteSense.csproj",
+      "packagesPath": "C:\\Users\\Junior\\.nuget\\packages\\",
+      "outputPath": "C:\\Projects\\PlayniteSense\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Junior\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net462"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net462": {
+          "targetAlias": "net462",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
+    },
+    "frameworks": {
+      "net462": {
+        "targetAlias": "net462",
+        "dependencies": {
+          "Nefarius.ViGEm.Client": {
+            "target": "Package",
+            "version": "[1.21.256, )"
+          },
+          "SharpDX.XInput": {
+            "target": "Package",
+            "version": "[4.2.0, )"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
