@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <OutputType>Library</OutputType>
+    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>PlayniteSense</AssemblyName>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Platforms>AnyCPU</Platforms>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>true</Prefer32Bit>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <!-- Explicit source list prevents obsolete files left in the folder
+       from being compiled accidentally. -->
+  <ItemGroup>
+    <Compile Include="HidHideManager.cs" />
+    <Compile Include="PlayniteSensePlugin.cs" />
+    <Compile Include="PlayniteSenseSettings.cs" />
+    <Compile Include="PlayniteSenseSettingsView.xaml.cs">
+      <DependentUpon>PlayniteSenseSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IPhysicalPad.cs" />
+    <Compile Include="RealPad.cs" />
+    <Compile Include="SdlPhysicalPad.cs" />
+    <Compile Include="VirtualPadBridge.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Playnite.SDK">
+      <HintPath>$(LocalAppData)\Playnite\Playnite.SDK.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nefarius.ViGEm.Client" Version="1.21.256" />
+    <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="extension.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
