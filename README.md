@@ -39,6 +39,6 @@ This extension requires specific drivers to handle the low-level communication b
 
 ## Why I created this (Motivation)
 
-Many games on platforms like Epic and GOG do not support the DualSense controller natively. Previously, to make them work, it was necessary to add them to Steam to leverage the Steam API, and then import those shortcuts into Playnite (which is the reason why I created my other plugin, `SteamNonSteamImporter`).
+Many games on platforms like Epic and GOG do not support the DualSense controller natively (specially via Bluetooth). Previously, to make them work, it was necessary to add them to Steam to leverage the Steam API, and then import those shortcuts into Playnite (which is the reason why I created my other plugin, `SteamNonSteamImporter`).
 
 However, this workflow created a significant bottleneck: it limited my ability to manage my complete library, as I could only apply these configurations to games that were already installed. With this addon, I can leverage Playnite's full library management capabilities without needing Steam as an intermediary, allowing me to use my DualSense with any game in my library without the usual headaches.
