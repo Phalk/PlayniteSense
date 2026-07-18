@@ -9,4 +9,5 @@ packages/
 *.nupkg
 *.pext
 _ReSharper*/
+.vs*/
 *.DotSettings.user
