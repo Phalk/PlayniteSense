@@ -1,15 +1,8 @@
-AddonId: SteamNonSteamImporter_8d105bff-eac4-45c5-90ba-c77fdd66b882
+AddonId: PlayniteSense_ceb0583b-3a53-4448-989b-e3943a6d397b
 Packages:
-  - Version: 1.2
+  - Version: 0.1
     RequiredApiVersion: 6.2.0
     ReleaseDate: 2026-07-18
-    PackageUrl: https://github.com/Phalk/SteamNonSteamImporter/releases/download/1.2/SteamNonSteamImporter_8d105bff-eac4-45c5-90ba-c77fdd66b882_1_2.pext
+    PackageUrl: https://github.com/Phalk/PlayniteSense/releases/download/0.1/PlayniteSense_ceb0583b-3a53-4448-989b-e3943a6d397b_0_1.pext
     Changelog:
-      - Some fixes, reduced log verbose
-      - Optimization
-  - Version: 1.0
-    RequiredApiVersion: 6.2.0
-    ReleaseDate: 2025-05-31
-    PackageUrl: https://github.com/Phalk/SteamNonSteamImporter/releases/download/1.0/SteamNonSteamImporter_8d105bff-eac4-45c5-90ba-c77fdd66b882_1_0.pext
-    Changelog:
-      - Initial release
+      - Initial release (beta)
