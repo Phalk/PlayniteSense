@@ -1,13 +1,16 @@
+# Pastas do Visual Studio e de compilação
 .vs/
-[Bb]in/
-[Oo]bj/
-packages/
+bin/
+obj/
+
+# Arquivos de configurações e metadados
 *.user
 *.suo
 *.pdb
 *.pext
 *.nupkg
-*.pext
 _ReSharper*/
-.vs*/
 *.DotSettings.user
+
+# Forçar inclusão da pasta manifests
+!manifests/
