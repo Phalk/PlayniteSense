@@ -30,7 +30,7 @@ This extension requires specific drivers to handle the low-level communication b
 
 ## Troubleshooting
 
-*   **Double Input:** If your game is registering two controllers, ensure that **HidHide** is correctly configured to hide your physical DualSense controller from the system.
+*   **Double Input:** If your game is registering two controllers, ensure that **HidHide** is correctly installed and working.
 *   **Controller Not Detected:** Verify that **ViGEmBus** is installed and that you have restarted your system if prompted during the driver installation.
 
 
