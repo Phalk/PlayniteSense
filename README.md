@@ -4,7 +4,6 @@ PlayniteSense is a Playnite extension that allows you to seamlessly use a DualSe
 
 ## Features
 
-*   **Steam-Free Emulation:** Use your DualSense controller without relying on Steam to manage input mapping.
 *   **Per-Game Configuration:** Don't settle for a global setting. Easily toggle between Xbox 360 or DualShock 4 emulation for each specific game directly via the Playnite context menu.
 *   **Native Playnite Integration:** Designed to feel like a native part of your library management workflow.
 
