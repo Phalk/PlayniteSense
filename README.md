@@ -1,6 +1,6 @@
 # PlayniteSense
 
-PlayniteSense is a Playnite extension that allows you to seamlessly use a DualSense controller with games that lack native support. It acts as a wrapper, converting your DualSense inputs into either Xbox 360 or DualShock 4 signals, effectively bypassing the need to run Steam's controller configuration.
+PlayniteSense is a Playnite extension that allows you to seamlessly use a DualSense controller with games that lack native support. It acts as a wrapper, converting your DualSense inputs into either Xbox 360 or DualShock 4 signals.
 
 ## Features
 
