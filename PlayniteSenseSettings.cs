@@ -8,12 +8,16 @@ namespace PlayniteSense
     {
         public List<Guid> EnabledGames { get; set; } = new List<Guid>();
         public Dictionary<Guid, TargetType> GameModes { get; set; } = new Dictionary<Guid, TargetType>();
+        public bool EnableDesktopControls { get; set; }
+        public bool EnableDesktopControlsOutsideGames { get; set; }
     }
 
     public class PlayniteSenseSettingsViewModel : ObservableObject, ISettings
     {
         private readonly PlayniteSensePlugin plugin;
         public PlayniteSenseSettings Settings { get; set; }
+        private bool originalDesktopControls;
+        private bool originalDesktopControlsOutsideGames;
 
         public PlayniteSenseSettingsViewModel(PlayniteSensePlugin plugin)
         {
@@ -31,12 +35,22 @@ namespace PlayniteSense
             }
         }
 
-        public void BeginEdit() { }
-        public void CancelEdit() { }
+        public void BeginEdit()
+        {
+            originalDesktopControls = Settings.EnableDesktopControls;
+            originalDesktopControlsOutsideGames = Settings.EnableDesktopControlsOutsideGames;
+        }
+
+        public void CancelEdit()
+        {
+            Settings.EnableDesktopControls = originalDesktopControls;
+            Settings.EnableDesktopControlsOutsideGames = originalDesktopControlsOutsideGames;
+        }
 
         public void EndEdit()
         {
             plugin.SavePluginSettings(Settings);
+            plugin.ApplyDesktopControlSettings();
         }
 
         public bool VerifySettings(out List<string> errors)

@@ -10,6 +10,7 @@ namespace PlayniteSense
     {
         private const string SdlLibrary = "SDL2.dll";
         private const uint SdlInitGameController = 0x00002000;
+        private const string BackgroundEventsHint = "SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS";
 
         private const ushort SonyVendorId = 0x054C;
         private const ushort DualSenseProductId = 0x0CE6;
@@ -22,6 +23,10 @@ namespace PlayniteSense
         private bool ownsGameControllerSubsystem;
         private bool reusedHostController;
         private RealPadState state = new RealPadState();
+        private bool touchApiAvailable = true;
+        private readonly bool enableBackgroundInput;
+        private string previousBackgroundHint;
+        private bool backgroundHintChanged;
 
         private readonly string detectedDeviceInstanceId;
         private readonly string detectedDeviceName;
@@ -32,12 +37,14 @@ namespace PlayniteSense
             string deviceInstanceId,
             string deviceName,
             string connectionType,
-            ushort productId)
+            ushort productId,
+            bool enableBackgroundInput = false)
         {
             detectedDeviceInstanceId = deviceInstanceId;
             detectedDeviceName = deviceName;
             detectedConnectionType = connectionType;
             preferredProductId = productId;
+            this.enableBackgroundInput = enableBackgroundInput;
         }
 
         public bool IsConnected
@@ -94,6 +101,13 @@ namespace PlayniteSense
 
             try
             {
+                if (enableBackgroundInput)
+                {
+                    previousBackgroundHint = Marshal.PtrToStringAnsi(SDL_GetHint(BackgroundEventsHint));
+                    if (previousBackgroundHint != "1")
+                        backgroundHintChanged = SDL_SetHint(BackgroundEventsHint, "1") != 0;
+                }
+
                 if ((SDL_WasInit(SdlInitGameController) & SdlInitGameController) == 0)
                 {
                     if (SDL_InitSubSystem(SdlInitGameController) != 0)
@@ -243,6 +257,29 @@ namespace PlayniteSense
                     PointOfViewControllers = new[] { DpadToPov(up, down, left, right) }
                 };
 
+                if (touchApiAvailable)
+                {
+                    try
+                    {
+                        if (SDL_GameControllerGetNumTouchpads(controller) > 0)
+                        {
+                            for (int i = 0; i < SDL_GameControllerGetNumTouchpadFingers(controller, 0); i++)
+                            {
+                                byte pressed;
+                                float x, y, pressure;
+                                if (SDL_GameControllerGetTouchpadFinger(controller, 0, i, out pressed, out x, out y, out pressure) == 0 && pressed != 0)
+                                {
+                                    state.TouchId = i;
+                                    state.TouchX = x;
+                                    state.TouchY = y;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    catch (EntryPointNotFoundException) { touchApiAvailable = false; }
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -250,6 +287,21 @@ namespace PlayniteSense
                 LastError = "SDL state polling failed: " + ex.Message;
                 return false;
             }
+        }
+
+        public bool TrySetVibration(byte strength)
+        {
+            if (!IsConnected)
+                return false;
+
+            try
+            {
+                ushort magnitude = (ushort)(strength * 257);
+                // SDL also stops the motors automatically if the listener disappears.
+                return SDL_GameControllerRumble(controller, magnitude, magnitude, strength == 0 ? 0u : 250u) == 0;
+            }
+            catch (EntryPointNotFoundException) { return false; }
+            catch (DllNotFoundException) { return false; }
         }
 
         public void Disconnect()
@@ -273,6 +325,16 @@ namespace PlayniteSense
             if (quitOwnedSubsystem)
             {
                 try { SDL_QuitSubSystem(SdlInitGameController); } catch { }
+            }
+            if (backgroundHintChanged)
+            {
+                backgroundHintChanged = false;
+                try
+                {
+                    if (Marshal.PtrToStringAnsi(SDL_GetHint(BackgroundEventsHint)) == "1")
+                        SDL_SetHint(BackgroundEventsHint, previousBackgroundHint);
+                }
+                catch { }
             }
         }
 
@@ -427,6 +489,12 @@ namespace PlayniteSense
         private static extern uint SDL_WasInit(uint flags);
 
         [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr SDL_GetHint(string name);
+
+        [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int SDL_SetHint(string name, string value);
+
+        [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
         private static extern int SDL_InitSubSystem(uint flags);
 
         [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
@@ -466,6 +534,9 @@ namespace PlayniteSense
         private static extern int SDL_GameControllerGetAttached(IntPtr gameController);
 
         [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int SDL_GameControllerRumble(IntPtr gameController, ushort lowFrequency, ushort highFrequency, uint durationMs);
+
+        [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr SDL_GameControllerName(IntPtr gameController);
 
         [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
@@ -473,6 +544,16 @@ namespace PlayniteSense
 
         [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
         private static extern byte SDL_GameControllerGetButton(IntPtr gameController, SdlControllerButton button);
+
+        [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int SDL_GameControllerGetNumTouchpads(IntPtr gameController);
+
+        [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int SDL_GameControllerGetNumTouchpadFingers(IntPtr gameController, int touchpad);
+
+        [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int SDL_GameControllerGetTouchpadFinger(IntPtr gameController, int touchpad, int finger,
+            out byte state, out float x, out float y, out float pressure);
 
         [DllImport(SdlLibrary, CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr SDL_GetError();

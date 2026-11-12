@@ -11,6 +11,16 @@
                        FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
 
             <Separator Margin="0,4,0,10"/>
+            <TextBlock Text="Desktop controls" FontWeight="Bold" Margin="0,0,0,6"/>
+            <CheckBox Content="Enable mouse and Windows shortcuts during games"
+                      IsChecked="{Binding Settings.EnableDesktopControls, Mode=TwoWay}"
+                      Margin="0,0,0,6"/>
+            <CheckBox Content="Enable mouse and Windows shortcuts outside games"
+                      IsChecked="{Binding Settings.EnableDesktopControlsOutsideGames, Mode=TwoWay}"
+                      Margin="0,0,0,6"/>
+            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"
+                       Text="Hold Create/Share + Options for 0.6 seconds to toggle mouse mode. One vibration means enabled; two mean disabled (if rumble is supported). Touchpad or right stick moves the cursor. Touchpad click / Cross = left click; Circle = right click. L1 + Options = Alt+Tab; hold R1 + Options for 1 second = Alt+F4. Repeat the toggle to return to normal controller use. Outside games, the physical controller remains visible to other applications."/>
+            <Separator Margin="0,4,0,10"/>
             <TextBlock Text="Diagnostics" FontWeight="Bold" Margin="0,0,0,6"/>
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">

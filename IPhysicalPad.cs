@@ -14,6 +14,7 @@ namespace PlayniteSense
 
         bool TryConnect();
         bool Poll();
+        bool TrySetVibration(byte strength);
         void Disconnect();
     }
 

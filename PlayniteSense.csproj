@@ -26,13 +26,11 @@
     <Compile Include="RealPad.cs" />
     <Compile Include="SdlPhysicalPad.cs" />
     <Compile Include="VirtualPadBridge.cs" />
+    <Compile Include="DesktopController.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Playnite.SDK">
-      <HintPath>$(LocalAppData)\Playnite\Playnite.SDK.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <PackageReference Include="PlayniteSDK" Version="6.9.0" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <ItemGroup>

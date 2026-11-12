@@ -16,6 +16,9 @@ namespace PlayniteSense
         public int RotationZ { get; internal set; } = 32768;
         public bool[] Buttons { get; internal set; } = new bool[20];
         public int[] PointOfViewControllers { get; internal set; } = new[] { -1 };
+        public int TouchId { get; internal set; } = -1;
+        public double TouchX { get; internal set; }
+        public double TouchY { get; internal set; }
 
         internal RealPadState Clone()
         {
@@ -28,7 +31,10 @@ namespace PlayniteSense
                 RotationY = RotationY,
                 RotationZ = RotationZ,
                 Buttons = (bool[])Buttons.Clone(),
-                PointOfViewControllers = (int[])PointOfViewControllers.Clone()
+                PointOfViewControllers = (int[])PointOfViewControllers.Clone(),
+                TouchId = TouchId,
+                TouchX = TouchX,
+                TouchY = TouchY
             };
         }
     }
@@ -64,6 +70,7 @@ namespace PlayniteSense
         private volatile bool hasReport;
         private RealPadState state = new RealPadState();
         private int inputReportLength = 78;
+        private int outputReportLength;
         private ushort productId;
         private PhysicalReportMode reportMode;
 
@@ -216,6 +223,7 @@ namespace PlayniteSense
                             keepHandle = true;
                             productId = attributes.ProductId;
                             inputReportLength = Math.Max(10, (int)caps.InputReportByteLength);
+                            outputReportLength = caps.OutputReportByteLength;
                             DevicePath = path;
                             DeviceInstanceId = instanceId;
                             DeviceName = ReadHidString(handle, HidD_GetProductString);
@@ -289,6 +297,88 @@ namespace PlayniteSense
         public bool Poll()
         {
             return IsConnected && hasReport;
+        }
+
+        public bool TrySetVibration(byte strength)
+        {
+            lock (lifecycleSync)
+            {
+                if (!IsConnected || string.IsNullOrEmpty(DevicePath))
+                    return false;
+
+                bool dualSense = productId == DualSenseProductId || productId == DualSenseEdgeProductId;
+                bool bluetooth = ConnectionType == "Bluetooth";
+                byte[] report = CreateVibrationReport(dualSense, bluetooth, outputReportLength, strength);
+                if (report == null)
+                    return false;
+
+                // A separate handle prevents a blocking input ReadFile from serializing the write.
+                IntPtr handle = CreateFile(DevicePath, GenericWrite, FileShareRead | FileShareWrite,
+                    IntPtr.Zero, OpenExisting, 0, IntPtr.Zero);
+                if (handle == InvalidHandleValue || handle == IntPtr.Zero)
+                    return false;
+
+                try
+                {
+                    uint written;
+                    return WriteFile(handle, report, (uint)report.Length, out written, IntPtr.Zero) &&
+                           written == report.Length;
+                }
+                finally
+                {
+                    CloseHandle(handle);
+                }
+            }
+        }
+
+        // Sony output report layouts follow SDL's PS4/PS5 HIDAPI drivers.
+        // Only rumble flags are set, leaving the light bar and other effects alone.
+        internal static byte[] CreateVibrationReport(bool dualSense, bool bluetooth, int reportLength, byte strength)
+        {
+            int packetLength = bluetooth ? 78 : (dualSense ? 48 : 32);
+            if (reportLength < packetLength)
+                return null;
+
+            byte[] report = new byte[reportLength];
+            if (dualSense)
+            {
+                report[0] = bluetooth ? (byte)0x31 : (byte)0x02;
+                int offset = bluetooth ? 2 : 1;
+                if (bluetooth)
+                    report[1] = 0x02;
+                report[offset] = 0x03; // Compatible rumble emulation, including older firmware.
+                report[offset + 2] = strength;
+                report[offset + 3] = strength;
+            }
+            else
+            {
+                report[0] = bluetooth ? (byte)0x11 : (byte)0x05;
+                if (bluetooth)
+                    report[1] = 0xC4;
+                report[bluetooth ? 3 : 1] = 0x01; // Enable rumble only.
+                int offset = bluetooth ? 6 : 4;
+                report[offset] = strength;
+                report[offset + 1] = strength;
+            }
+
+            if (bluetooth)
+            {
+                uint crc = UpdateCrc32(0xFFFFFFFF, 0xA2);
+                for (int i = 0; i < 74; i++)
+                    crc = UpdateCrc32(crc, report[i]);
+                crc = ~crc;
+                for (int i = 0; i < 4; i++)
+                    report[74 + i] = (byte)(crc >> (8 * i));
+            }
+            return report;
+        }
+
+        private static uint UpdateCrc32(uint crc, byte value)
+        {
+            crc ^= value;
+            for (int bit = 0; bit < 8; bit++)
+                crc = (crc & 1) != 0 ? (crc >> 1) ^ 0xEDB88320u : crc >> 1;
+            return crc;
         }
 
         private void ReadLoop()
@@ -412,7 +502,8 @@ namespace PlayniteSense
                 report[rightTriggerOffset],
                 report[buttonsOffset],
                 report[buttonsOffset + 1],
-                report[buttonsOffset + 2]);
+                report[buttonsOffset + 2],
+                report, count, buttonsOffset == axesOffset + 7 ? axesOffset + 32 : -1, 1080);
 
             return true;
         }
@@ -454,7 +545,8 @@ namespace PlayniteSense
                 report[rightTriggerOffset],
                 report[buttonsOffset],
                 report[buttonsOffset + 1],
-                report[buttonsOffset + 2]);
+                report[buttonsOffset + 2],
+                report, count, GetDualShockTouchOffset(report, count, offset), 942);
 
             return true;
         }
@@ -468,7 +560,8 @@ namespace PlayniteSense
             byte rightTrigger,
             byte buttons0,
             byte buttons1,
-            byte buttons2)
+            byte buttons2,
+            byte[] report, int count, int touchOffset, int touchHeight)
         {
             var buttons = new bool[20];
             buttons[0] = (buttons0 & 0x10) != 0; // Square
@@ -506,7 +599,27 @@ namespace PlayniteSense
                     Buttons = buttons,
                     PointOfViewControllers = new[] { pov }
                 };
+                if (touchOffset >= 0 && touchOffset + 8 <= count)
+                {
+                    for (int i = touchOffset; i < touchOffset + 8; i += 4)
+                    {
+                        if ((report[i] & 0x80) != 0) continue;
+                        state.TouchId = report[i] & 0x7f;
+                        state.TouchX = (report[i + 1] | ((report[i + 2] & 0x0f) << 8)) / 1920.0;
+                        state.TouchY = ((report[i + 2] >> 4) | (report[i + 3] << 4)) / (double)touchHeight;
+                        break;
+                    }
+                }
             }
+        }
+
+        private int GetDualShockTouchOffset(byte[] report, int count, int offset)
+        {
+            if (reportMode == PhysicalReportMode.BluetoothSimple || count < (offset == 3 ? 78 : 64))
+                return -1;
+            int reports = report[offset + 32];
+            int maximum = offset == 3 ? 4 : 3;
+            return reports > 0 && reports <= maximum ? offset + 34 + (reports - 1) * 9 : -1;
         }
 
         private static int ExpandByte(byte value)
@@ -799,6 +912,7 @@ namespace PlayniteSense
             ConnectionType = null;
             productId = 0;
             inputReportLength = 78;
+            outputReportLength = 0;
             reportMode = PhysicalReportMode.Unknown;
 
             lock (stateSync)
@@ -949,6 +1063,10 @@ namespace PlayniteSense
             uint numberOfBytesToRead,
             out uint numberOfBytesRead,
             IntPtr overlapped);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool WriteFile(IntPtr file, byte[] buffer, uint numberOfBytesToWrite,
+            out uint numberOfBytesWritten, IntPtr overlapped);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool CancelIoEx(IntPtr file, IntPtr overlapped);

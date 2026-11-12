@@ -29,6 +29,7 @@ namespace PlayniteSense
         private bool? previousInverseState;
         private string cloakedDeviceInstanceId;
         private RealPadState lastSubmittedState;
+        private DesktopController desktopController;
 
         public event Action<string> StatusChanged;
 
@@ -82,13 +83,8 @@ namespace PlayniteSense
             return false;
         }
 
-        public bool VerifyDependenciesExist()
+        public bool IsViGEmAvailable()
         {
-            if (!IsHidHideInstalled() || !HidHideManager.IsAvailable())
-            {
-                return false;
-            }
-
             try
             {
                 using (new ViGEmClient())
@@ -102,11 +98,25 @@ namespace PlayniteSense
             }
         }
 
-        public void Start(TargetType type)
+        public bool IsHidHideAvailable() => IsHidHideInstalled() && HidHideManager.IsAvailable();
+
+        public bool VerifyDependenciesExist() => IsHidHideAvailable() && IsViGEmAvailable();
+
+        public void StartDesktopOnly()
+        {
+            if (running) return;
+            CleanupStoppedSession();
+            if (!TryOpenPhysicalController(true)) return;
+            desktopController = new DesktopController(message => StatusChanged?.Invoke(message), physicalPad.TrySetVibration);
+            StartLoop();
+        }
+
+        public void Start(TargetType type, bool enableDesktopControls = false)
         {
             if (running)
             {
-                return;
+                if (virtualPad != null) return;
+                Stop();
             }
 
             // Clear any resources left by a previous interrupted/disconnected session before
@@ -126,7 +136,7 @@ namespace PlayniteSense
                 return;
             }
 
-            if (!TryOpenPhysicalController())
+            if (!TryOpenPhysicalController(enableDesktopControls))
             {
                 return;
             }
@@ -156,6 +166,16 @@ namespace PlayniteSense
                 return;
             }
 
+            desktopController = enableDesktopControls
+                ? new DesktopController(message => StatusChanged?.Invoke(message), physicalPad.TrySetVibration)
+                : null;
+            StartLoop();
+
+            StatusChanged?.Invoke("Active: " + physicalPad.DeviceName + " via " + physicalPad.InputBackend + " -> Virtual " + type);
+        }
+
+        private void StartLoop()
+        {
             running = true;
             loopThread = new Thread(Loop)
             {
@@ -164,10 +184,9 @@ namespace PlayniteSense
             };
             loopThread.Start();
 
-            StatusChanged?.Invoke("Active: " + physicalPad.DeviceName + " via " + physicalPad.InputBackend + " -> Virtual " + type);
         }
 
-        private bool TryOpenPhysicalController()
+        private bool TryOpenPhysicalController(bool preferTouch)
         {
             var nativePad = new RealPad();
             bool nativeConnected = nativePad.TryConnect();
@@ -176,7 +195,8 @@ namespace PlayniteSense
             // application (Steam, Playnite Fullscreen, etc.) has switched the controller
             // to Bluetooth enhanced reports, prefer SDL in every Playnite mode.
             if (nativeConnected &&
-                nativePad.ReportMode != PhysicalReportMode.BluetoothEnhanced)
+                nativePad.ReportMode != PhysicalReportMode.BluetoothEnhanced &&
+                (!preferTouch || nativePad.ReportMode != PhysicalReportMode.BluetoothSimple))
             {
                 physicalPad = nativePad;
                 return true;
@@ -196,7 +216,7 @@ namespace PlayniteSense
                 : nativePad.LastDetectedProductId;
 
             string fallbackReason = nativeConnected
-                ? "Bluetooth enhanced reports were detected."
+                ? "Bluetooth controller detected; trying SDL for full input."
                 : "Native HID did not receive a readable report: " +
                   (nativePad.LastError ?? "unknown error");
 
@@ -209,7 +229,8 @@ namespace PlayniteSense
                 deviceInstanceId,
                 deviceName,
                 connectionType,
-                productId);
+                productId,
+                preferTouch);
 
             if (sdlPad.TryConnect())
             {
@@ -225,7 +246,7 @@ namespace PlayniteSense
             {
                 StatusChanged?.Invoke(
                     "SDL controller input was unavailable (" + sdlError +
-                    "). Continuing with native enhanced HID input.");
+                    "). Continuing with native HID input.");
                 physicalPad = nativePad;
                 return true;
             }
@@ -504,6 +525,8 @@ namespace PlayniteSense
                         break;
                     }
 
+                    desktopController?.UpdateFeedback();
+
                     if (!pad.Poll())
                     {
                         if (!pad.IsConnected)
@@ -520,6 +543,15 @@ namespace PlayniteSense
                     }
 
                     RealPadState state = pad.State;
+                    if (desktopController != null && desktopController.Update(state))
+                    {
+                        state = new RealPadState();
+                    }
+                    if (virtualPad == null)
+                    {
+                        Thread.Sleep(4);
+                        continue;
+                    }
                     if (currentTarget == TargetType.Xbox360)
                     {
                         SubmitXbox360(state);
@@ -577,6 +609,8 @@ namespace PlayniteSense
                                             previousInverseState.HasValue;
 
                 DisposeVirtualPad();
+                desktopController?.StopFeedback();
+                desktopController = null;
 
                 // Release our input source before HidHide exposes the physical device again.
                 if (physicalPad != null)

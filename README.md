@@ -6,6 +6,24 @@ PlayniteSense is a Playnite extension that allows you to seamlessly use a DualSe
 
 *   **Per-Game Configuration:** Don't settle for a global setting. Easily toggle between Xbox 360 or DualShock 4 emulation for each specific game directly via the Playnite context menu.
 *   **Native Playnite Integration:** Designed to feel like a native part of your library management workflow.
+*   **Driver checks:** PlayniteSense checks both required drivers at startup and before virtual controller emulation, and offers to open their official download pages when unavailable.
+*   **Optional desktop controls:** Separate settings enable mouse and Windows shortcuts during games (including games without virtual controller emulation) and outside games while Playnite is running. The outside-games listener automatically resumes after a game ends and reconnects when a controller becomes available.
+
+### Desktop controls
+
+Hold Create/Share and Options for 0.6 seconds to toggle desktop mode. Repeat the combination to resume gameplay.
+
+One short vibration confirms desktop mode is enabled. Two short vibrations confirm it is disabled. Feedback works with supported controllers over USB or Bluetooth when the input backend supports rumble.
+
+| Input | Action |
+| --- | --- |
+| Swipe touchpad / right stick | Move cursor |
+| Touchpad click / Cross | Left click |
+| Circle | Right click |
+| L1 + Options | Alt+Tab |
+| Hold R1 + Options for 1 second | Alt+F4 |
+
+Virtual gamepad input is neutral while desktop mode is active. Outside games and in games using the physical controller directly, applications may also receive its button presses. Bluetooth basic reports do not provide touch coordinates; use the right stick if touch input is unavailable. Windows may restrict injected input into elevated applications.
 
 ## Prerequisites
 
@@ -18,7 +36,7 @@ This extension requires specific drivers to handle the low-level communication b
 
 ## Installation
 
-1.  Download the latest release from the [Releases page](https://github.com/your-username/PlayniteSense/releases) and open the pext file.
+1.  Download the latest release from the [Releases page](https://github.com/Phalk/PlayniteSense/releases) and open the pext file.
 2. Restart Playnite.
 
 ## How to Use

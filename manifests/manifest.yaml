@@ -1,5 +1,17 @@
 AddonId: PlayniteSense_ceb0583b-3a53-4448-989b-e3943a6d397b
 Packages:
+  - Version: 0.4
+    RequiredApiVersion: 6.9.0
+    ReleaseDate: 2026-11-12
+    PackageUrl: https://github.com/Phalk/PlayniteSense/releases/download/0.4/PlayniteSense_ceb0583b-3a53-4448-989b-e3943a6d397b_0_4.pext
+    Changelog:
+      - Improved native Windows HID and SDL controller input, including Bluetooth support.
+      - Added support for DualShock 4 and DualSense Edge controllers.
+      - Improved HidHide integration and controller cleanup after games close.
+      - Added required driver checks and official download links for ViGEmBus and HidHide.
+      - Added optional mouse control, clicks, Alt+Tab and Alt+F4 using the controller.
+      - Added independent desktop controls settings for use during and outside games, with automatic reconnection outside games.
+      - Added vibration feedback when enabling or disabling mouse mode.
   - Version: 0.1
     RequiredApiVersion: 6.2.0
     ReleaseDate: 2026-07-18

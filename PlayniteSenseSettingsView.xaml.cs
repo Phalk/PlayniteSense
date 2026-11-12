@@ -15,14 +15,22 @@ namespace PlayniteSense
     public partial class PlayniteSenseSettingsView : UserControl
     {
         private readonly VirtualPadBridge bridge;
+        private readonly Func<bool> checkRequiredDrivers;
+        private readonly Func<bool> beginDiagnostics;
+        private readonly Action endDiagnostics;
+        private readonly PlayniteSenseSettingsViewModel viewModel;
         private readonly RealPad diagnosticPad = new RealPad();
         private readonly DispatcherTimer liveTimer;
-        private bool manualBridgeStartedByView;
 
-        public PlayniteSenseSettingsView(PlayniteSenseSettingsViewModel viewModel, VirtualPadBridge bridge)
+        public PlayniteSenseSettingsView(PlayniteSenseSettingsViewModel viewModel, VirtualPadBridge bridge,
+            Func<bool> checkRequiredDrivers, Func<bool> beginDiagnostics, Action endDiagnostics)
         {
             InitializeComponent();
             this.bridge = bridge;
+            this.viewModel = viewModel;
+            this.checkRequiredDrivers = checkRequiredDrivers;
+            this.beginDiagnostics = beginDiagnostics;
+            this.endDiagnostics = endDiagnostics;
             DataContext = viewModel;
 
             bridge.StatusChanged += OnBridgeStatusChanged;
@@ -36,20 +44,15 @@ namespace PlayniteSense
                 liveTimer.Stop();
                 bridge.StatusChanged -= OnBridgeStatusChanged;
 
-                if (manualBridgeStartedByView)
-                {
-                    bridge.Stop();
-                    manualBridgeStartedByView = false;
-                }
-
                 diagnosticPad.Dispose();
+                endDiagnostics();
             };
 
             Log("Diagnostic panel loaded.");
         }
 
         private void OnBridgeStatusChanged(string status) =>
-            Dispatcher.Invoke(() => Log("[Bridge] " + status));
+            Dispatcher.BeginInvoke(new Action(() => Log("[Bridge] " + status)));
 
         private void Log(string message)
         {
@@ -69,6 +72,11 @@ namespace PlayniteSense
 
         private void BtnTestPad_Click(object sender, RoutedEventArgs e)
         {
+            if (!beginDiagnostics())
+            {
+                Log("Close running games before testing the controller.");
+                return;
+            }
             if (bridge.IsRunning)
             {
                 Log("Stop the controller bridge before testing the physical controller directly.");
@@ -98,7 +106,7 @@ namespace PlayniteSense
         private void BtnCheckDriver_Click(object sender, RoutedEventArgs e)
         {
             bool vigemOk = false;
-            bool hidHideOk = bridge.IsHidHideInstalled();
+            bool hidHideOk = bridge.IsHidHideAvailable();
 
             try
             {
@@ -124,13 +132,21 @@ namespace PlayniteSense
             Log(vigemOk && hidHideOk
                 ? "STATUS: ViGEmBus and HidHide are ready."
                 : "STATUS: One or more required dependencies are unavailable.");
+            if (!vigemOk || !hidHideOk)
+                checkRequiredDrivers();
         }
 
         private void BtnStartBridge_Click(object sender, RoutedEventArgs e)
         {
-            if (!bridge.VerifyDependenciesExist())
+            if (!checkRequiredDrivers())
             {
                 Log("Cannot start: ViGEmBus or HidHide is unavailable.");
+                return;
+            }
+
+            if (!beginDiagnostics())
+            {
+                Log("Close running games before starting the diagnostic bridge.");
                 return;
             }
 
@@ -146,10 +162,8 @@ namespace PlayniteSense
                 txtRawPad.Text = "Released while the controller bridge is running.";
                 Thread.Sleep(120);
 
-                bool wasAlreadyRunning = bridge.IsRunning;
                 txtXInput.Text = "Starting controller bridge...";
-                bridge.Start(mode);
-                manualBridgeStartedByView = !wasAlreadyRunning && bridge.IsRunning;
+                bridge.Start(mode, viewModel.Settings.EnableDesktopControls);
 
                 if (!bridge.IsRunning)
                 {
@@ -166,8 +180,12 @@ namespace PlayniteSense
 
         private void BtnStopBridge_Click(object sender, RoutedEventArgs e)
         {
+            if (!beginDiagnostics())
+            {
+                Log("Close running games before stopping the diagnostic bridge.");
+                return;
+            }
             bridge.Stop();
-            manualBridgeStartedByView = false;
             txtXInput.Text = "Bridge is stopped. The physical controller is available.";
             txtRawPad.Text = "Click Test Physical Controller to read direct input.";
         }
@@ -201,7 +219,7 @@ namespace PlayniteSense
             RealPadState virtualState;
             if (!bridge.TryGetVirtualFeedSnapshot(out target, out virtualState))
             {
-                txtXInput.Text = "Bridge is stopped.";
+                txtXInput.Text = bridge.IsRunning ? "Desktop controls listener is running." : "Bridge is stopped.";
                 return;
             }
 
